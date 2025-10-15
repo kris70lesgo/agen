@@ -237,12 +237,12 @@ export const NavbarLogo = () => {
       className="relative z-20 mr-4 flex items-center space-x-2 px-2 py-1 text-sm font-normal text-black"
     >
       <img
-        src="https://assets.aceternity.com/logo-dark.png"
+        src="/logo2.png"
         alt="logo"
-        width={30}
-        height={30}
+        className="w-10 h-10 [filter:brightness(0)]"
       />
-      <span className="font-medium text-black dark:text-white">Startup</span>
+
+      <span className="font-medium text-black dark:text-white">Medhack</span>
     </a>
   );
 };

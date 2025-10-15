@@ -153,7 +153,7 @@ function ThreeDCardDemo() {
 						as="button"
 						className="rounded-xl bg-white px-4 py-2 text-xs font-bold text-neutral-900 hover:bg-neutral-200"
 					>
-						Sign up
+						Get started
 					</CardItem>
 				</div>
 			</CardBody>
