@@ -57,7 +57,7 @@ export async function POST(request: Request) {
 		const instructions = markdownToInstructions(planMarkdown);
 		const pdfBytes = await buildPdf(instructions, requestedFileName);
 
-		return new NextResponse(pdfBytes, {
+		return new NextResponse(Buffer.from(pdfBytes), {
 			status: 200,
 			headers: {
 				"Content-Type": "application/pdf",

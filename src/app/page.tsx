@@ -1,31 +1,16 @@
-"use client";
-
-import React, { useRef, useState } from "react";
+import { auth0 } from "@/lib/auth0";
+import './globals.css';
+import React from "react";
 import Prism from "@/components/Prism";
-import VariableProximity from "@/components/VariableProximity";
 import { RainbowButton } from "@/components/ui/rainbow-button";
-import {
-  Navbar,
-  NavBody,
-  NavItems,
-  NavbarLogo,
-  NavbarButton,
-  MobileNav,
-  MobileNavHeader,
-  MobileNavToggle,
-  MobileNavMenu,
-} from "@/components/ui/resizable-navbar";
 import { HoverBorderGradient } from "@/components/ui/hover-border-gradient";
+import { MainNavbar } from "@/components/MainNavbar";
+import CardSwap, { Card } from '@/components/CardSwap';
+import { Marquee } from "@/components/ui/marquee";
+import { cn } from "@/lib/utils";
 
-const navItems = [
-  { name: "Features", link: "#features" },
-  { name: "Pricing", link: "#pricing" },
-  { name: "Contact", link: "#contact" },
-];
-
-export default function Page() {
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+export default async function Home() {
+  const session = await auth0.getSession();
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-[#05050F] text-white">
@@ -35,134 +20,172 @@ export default function Page() {
       <div className="pointer-events-none absolute inset-x-0 top-[35%] -z-20 h-[40rem] rounded-full bg-[radial-gradient(circle,_rgba(120,220,255,0.12)_0%,_rgba(5,5,15,0)_70%)] blur-[140px]" />
 
       {/* Navbar */}
-      <header className="pointer-events-none absolute inset-x-0 top-6 z-40 flex justify-center px-6">
-        <div className="pointer-events-auto w-full max-w-5xl rounded-full border border-white/10 bg-white/10 shadow-[0_12px_40px_rgba(12,10,32,0.45)] backdrop-blur-2xl backdrop-saturate-150">
-          <Navbar className="top-0">
-            <NavBody>
-              <NavbarLogo />
-              <NavItems
-                items={navItems}
-                onItemClick={() => setIsMobileMenuOpen(false)}
-              />
-              <div className="hidden items-center gap-3 md:flex">
-                <NavbarButton
-                  variant="secondary"
-                  className="border-white/30 bg-white/10 text-white hover:bg-white/20"
-                >
-                  Login
-                </NavbarButton>
-                <NavbarButton
-                  variant="primary"
-                  className="bg-white text-neutral-900 hover:bg-neutral-200"
-                >
-                  Book a call
-                </NavbarButton>
-              </div>
-            </NavBody>
-
-            <MobileNav>
-              <MobileNavHeader>
-                <NavbarLogo />
-                <MobileNavToggle
-                  isOpen={isMobileMenuOpen}
-                  onClick={() => setIsMobileMenuOpen((prev) => !prev)}
-                />
-              </MobileNavHeader>
-
-              <MobileNavMenu
-                isOpen={isMobileMenuOpen}
-                onClose={() => setIsMobileMenuOpen(false)}
-                className="bg-white/10 backdrop-blur-2xl"
-              >
-                {navItems.map((item) => (
-                  <a
-                    key={item.link}
-                    href={item.link}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="relative text-neutral-200 transition-colors hover:text-white"
-                  >
-                    <span className="block">{item.name}</span>
-                  </a>
-                ))}
-                <div className="flex w-full flex-col gap-3">
-                  <NavbarButton
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    variant="primary"
-                    className="w-full border border-white/20 bg-white/10 text-white hover:bg-white/20"
-                  >
-                    Login
-                  </NavbarButton>
-                  <NavbarButton
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    variant="primary"
-                    className="w-full bg-white text-neutral-900 hover:bg-neutral-200"
-                  >
-                    Book a call
-                  </NavbarButton>
-                </div>
-              </MobileNavMenu>
-            </MobileNav>
-          </Navbar>
-        </div>
-      </header>
+      <MainNavbar session={session} />
 
       {/* MAIN SECTION */}
-      <main
-        ref={containerRef}
-        className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 pt-32"
-        style={{ WebkitTapHighlightColor: "transparent" }}
-      >
-        {/* Prism background */}
-        <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
-          <div className="absolute inset-0 mix-blend-soft-light bg-[radial-gradient(circle_at_50%_0%,rgba(88,131,241,0.32)_0%,rgba(10,9,30,0.9)_52%,rgba(4,3,15,1)_88%)]" />
-          <Prism
-            animationType="rotate"
-            timeScale={0.35}
-            height={4.2}
-            baseWidth={5.2}
-            scale={3.2}
-            hueShift={0.35}
-            colorFrequency={1.6}
-            noise={0.08}
-            glow={1.4}
-            bloom={1.6}
-            transparent={true}
-            suspendWhenOffscreen={false}
-          />
-          <div className="pointer-events-none absolute inset-x-0 bottom-[-18%] h-[70%] mix-blend-screen bg-[radial-gradient(circle,_rgba(122,214,255,0.3)_0%,rgba(20,18,48,0.55)_46%,rgba(7,6,24,0.92)_82%)] blur-3xl" />
-        </div>
+      <MainContent session={session} />
 
-        {/* Text and buttons */}
-        <div className="relative z-20 flex max-w-3xl flex-col items-center text-center">
-          <VariableProximity
-            label={"Personalized nutrition guidance that adapts with every check-in"}
-            className="variable-proximity-demo block text-balance text-4xl leading-tight sm:text-5xl md:text-6xl"
-            fromFontVariationSettings={`'wght' 320, 'opsz' 10`}
-            toFontVariationSettings={`'wght' 1000, 'opsz' 68`}
-            containerRef={containerRef}
-            radius={180}
-            falloff="gaussian"
-            intensity={0.65}
-          />
-          <p className="mt-5 max-w-xl text-balance font-sans text-base text-neutral-400">
-            Launch diet plans that stay in sync with your clients—AI-crafted, coach-approved, and ready to send in seconds.
-          </p>
-          <div className="mt-9 flex flex-wrap items-center justify-center gap-4">
-            <HoverBorderGradient
-              containerClassName="rounded-full border border-white/20"
-              as="button"
-              className="flex items-center gap-2 bg-white px-5 py-2 text-sm font-semibold text-black dark:bg-black dark:text-white"
-            >
-              <ButtonLogo />
-              <span>Live product tour</span>
-            </HoverBorderGradient>
-            <RainbowButton variant="dark" className="px-6 py-2 text-sm font-semibold">
-              Get Started
-            </RainbowButton>
+      {/* CARD SWAP SECTION */}
+      <section className="relative z-10 py-20 px-6">
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-16 text-white">
+            How It Works
+          </h2>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Left side text */}
+            <div className="space-y-6">
+              <h3 className="text-4xl md:text-5xl font-bold text-white leading-tight">
+                Transform Your Practice in{" "}
+                <span className="bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
+                  Three Simple Steps
+                </span>
+              </h3>
+              <p className="text-lg text-gray-300 leading-relaxed">
+                Our AI-powered platform streamlines your entire workflow, from client intake to meal plan delivery. 
+                Say goodbye to hours of manual planning and hello to more time for what matters—helping your clients succeed.
+              </p>
+              <div className="space-y-4">
+                <div className="flex items-start gap-3">
+                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-purple-500/20 border border-purple-500/50 flex items-center justify-center text-purple-400 font-bold">
+                    1
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-white mb-1">Quick Data Collection</h4>
+                    <p className="text-sm text-gray-400">Capture all essential client information in minutes</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-cyan-500/20 border border-cyan-500/50 flex items-center justify-center text-cyan-400 font-bold">
+                    2
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-white mb-1">Intelligent AI Analysis</h4>
+                    <p className="text-sm text-gray-400">Let our AI create personalized, science-backed meal plans</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-purple-500/20 border border-purple-500/50 flex items-center justify-center text-purple-400 font-bold">
+                    3
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-white mb-1">Instant Delivery</h4>
+                    <p className="text-sm text-gray-400">Review, approve, and send—all in one seamless flow</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right side - CardSwap */}
+            <div style={{ height: '600px', position: 'relative' }}>
+              <CardSwap
+                cardDistance={60}
+                verticalDistance={70}
+                delay={5000}
+                pauseOnHover={false}
+              >
+                <Card>
+                  <div className="p-8 bg-gradient-to-br from-purple-900/40 to-blue-900/40 backdrop-blur-sm rounded-2xl border border-white/10 h-full">
+                    <h3 className="text-2xl font-bold mb-4 text-white">Step 1: Client Intake</h3>
+                    <p className="text-gray-300 text-lg">
+                      Gather your client&apos;s health data, dietary preferences, and goals through our intuitive intake form.
+                    </p>
+                  </div>
+                </Card>
+                <Card>
+                  <div className="p-8 bg-gradient-to-br from-blue-900/40 to-cyan-900/40 backdrop-blur-sm rounded-2xl border border-white/10 h-full">
+                    <h3 className="text-2xl font-bold mb-4 text-white">Step 2: AI-Powered Analysis</h3>
+                    <p className="text-gray-300 text-lg">
+                      Our advanced AI analyzes the data and generates a personalized meal plan tailored to your client&apos;s unique needs.
+                    </p>
+                  </div>
+                </Card>
+                <Card>
+                  <div className="p-8 bg-gradient-to-br from-cyan-900/40 to-purple-900/40 backdrop-blur-sm rounded-2xl border border-white/10 h-full">
+                    <h3 className="text-2xl font-bold mb-4 text-white">Step 3: Review & Send</h3>
+                    <p className="text-gray-300 text-lg">
+                      Review, customize if needed, and send the plan directly to your client—all in seconds.
+                    </p>
+                  </div>
+                </Card>
+              </CardSwap>
+            </div>
           </div>
         </div>
-      </main>
+      </section>
+
+      {/* TESTIMONIALS MARQUEE SECTION */}
+      <section className="relative z-10 py-20 px-6">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-white">
+            What Our Users Say
+          </h2>
+          <MarqueeDemo />
+        </div>
+      </section>
     </div>
+  );
+}
+
+// Separate client component for interactive features
+function MainContent({ session }: { session: { user?: { email?: string; name?: string } } | null }) {
+  return (
+    <main
+      className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 pt-32"
+      style={{ WebkitTapHighlightColor: "transparent" }}
+    >
+      {/* Prism background */}
+      <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+        <div className="absolute inset-0 mix-blend-soft-light bg-[radial-gradient(circle_at_50%_0%,rgba(88,131,241,0.32)_0%,rgba(10,9,30,0.9)_52%,rgba(4,3,15,1)_88%)]" />
+        <Prism
+          animationType="rotate"
+          timeScale={0.35}
+          height={4.2}
+          baseWidth={5.2}
+          scale={3.2}
+          hueShift={0.35}
+          colorFrequency={1.6}
+          noise={0.08}
+          glow={1.4}
+          bloom={1.6}
+          transparent={true}
+          suspendWhenOffscreen={false}
+        />
+        <div className="pointer-events-none absolute inset-x-0 bottom-[-18%] h-[70%] mix-blend-screen bg-[radial-gradient(circle,_rgba(122,214,255,0.3)_0%,rgba(20,18,48,0.55)_46%,rgba(7,6,24,0.92)_82%)] blur-3xl" />
+      </div>
+
+      {/* Text and buttons */}
+      <div className="relative z-20 flex max-w-3xl flex-col items-center text-center">
+        <h1 className="block text-balance text-4xl font-bold leading-tight sm:text-5xl md:text-6xl text-white [text-shadow:_0_2px_4px_rgba(0,0,0,0.5)] [WebkitTextStroke:1px_black]">
+          Personalized nutrition guidance that adapts with every check-in
+        </h1>
+        <p className="mt-5 max-w-xl text-balance font-sans text-base font-semibold text-black">
+          Launch diet plans that stay in sync with your clients—AI-crafted, coach-approved, and ready to send in seconds.
+        </p>
+        <div className="mt-9 flex flex-wrap items-center justify-center gap-4">
+          <HoverBorderGradient
+            containerClassName="rounded-full border border-white/20"
+            as="button"
+            className="flex items-center gap-2 bg-white px-5 py-2 text-sm font-semibold text-black dark:bg-black dark:text-white"
+          >
+            <ButtonLogo />
+            <span>Live product tour</span>
+          </HoverBorderGradient>
+          {session ? (
+            <a href="/dashboard">
+              <RainbowButton variant="dark" className="px-6 py-2 text-sm font-semibold">
+                Go to Dashboard
+              </RainbowButton>
+            </a>
+          ) : (
+            <a href="/auth/login?screen_hint=signup&returnTo=/dashboard">
+              <RainbowButton variant="dark" className="px-6 py-2 text-sm font-semibold">
+                Get Started
+              </RainbowButton>
+            </a>
+          )}
+        </div>
+      </div>
+    </main>
   );
 }
 
@@ -184,3 +207,99 @@ const ButtonLogo = () => (
     />
   </svg>
 );
+
+// Testimonials data
+const reviews = [
+  {
+    name: "Sarah Johnson",
+    username: "@sarahj",
+    body: "This tool has revolutionized how I manage my clients' nutrition plans. The AI suggestions are incredibly accurate!",
+    img: "https://avatar.vercel.sh/sarahj",
+  },
+  {
+    name: "Mike Chen",
+    username: "@mikechen",
+    body: "I've never seen anything like this before. It saves me hours every week. Absolutely amazing!",
+    img: "https://avatar.vercel.sh/mikechen",
+  },
+  {
+    name: "Emily Rodriguez",
+    username: "@emilyrod",
+    body: "The personalized meal plans are spot-on. My clients love the variety and attention to detail.",
+    img: "https://avatar.vercel.sh/emilyrod",
+  },
+  {
+    name: "David Park",
+    username: "@davidp",
+    body: "As a nutritionist, this is the best investment I've made. The Med Scan feature is a game-changer!",
+    img: "https://avatar.vercel.sh/davidp",
+  },
+  {
+    name: "Lisa Thompson",
+    username: "@lisathompson",
+    body: "My practice has grown 3x since using this platform. The AI-powered insights are incredible.",
+    img: "https://avatar.vercel.sh/lisathompson",
+  },
+  {
+    name: "James Wilson",
+    username: "@jameswilson",
+    body: "The seamless integration with my workflow makes client management effortless. Highly recommend!",
+    img: "https://avatar.vercel.sh/jameswilson",
+  },
+];
+
+const firstRow = reviews.slice(0, reviews.length / 2);
+const secondRow = reviews.slice(reviews.length / 2);
+
+const ReviewCard = ({
+  img,
+  name,
+  username,
+  body,
+}: {
+  img: string;
+  name: string;
+  username: string;
+  body: string;
+}) => {
+  return (
+    <figure
+      className={cn(
+        "relative h-full w-64 cursor-pointer overflow-hidden rounded-xl border p-4",
+        // dark theme with purple/cyan accents matching the background
+        "border-purple-500/20 bg-gradient-to-br from-purple-900/30 to-blue-900/30 backdrop-blur-sm",
+        "hover:border-purple-500/40 hover:from-purple-900/40 hover:to-blue-900/40 transition-all duration-300"
+      )}
+    >
+      <div className="flex flex-row items-center gap-2">
+        <img className="rounded-full" width="32" height="32" alt="" src={img} />
+        <div className="flex flex-col">
+          <figcaption className="text-sm font-medium text-white">
+            {name}
+          </figcaption>
+          <p className="text-xs font-medium text-purple-300/60">{username}</p>
+        </div>
+      </div>
+      <blockquote className="mt-2 text-sm text-gray-300">{body}</blockquote>
+    </figure>
+  );
+};
+
+function MarqueeDemo() {
+  return (
+    <div className="relative flex w-full flex-col items-center justify-center overflow-hidden">
+      <Marquee pauseOnHover className="[--duration:20s]">
+        {firstRow.map((review) => (
+          <ReviewCard key={review.username} {...review} />
+        ))}
+      </Marquee>
+      <Marquee reverse pauseOnHover className="[--duration:20s]">
+        {secondRow.map((review) => (
+          <ReviewCard key={review.username} {...review} />
+        ))}
+      </Marquee>
+      <div className="pointer-events-none absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r from-[#05050F] to-transparent"></div>
+      <div className="pointer-events-none absolute inset-y-0 right-0 w-1/4 bg-gradient-to-l from-[#05050F] to-transparent"></div>
+    </div>
+  );
+}
