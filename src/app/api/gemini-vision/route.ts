@@ -1,9 +1,44 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createOpenRouter } from "@openrouter/ai-sdk-provider";
 import { generateText } from "ai";
+import { auth0 } from "@/lib/auth0";
+import { withAuthorization } from "@/middleware/authorization";
+import { permissions } from "@/lib/auth0-fga";
+import { TokenVault } from "@/lib/token-vault";
 
 export async function POST(req: NextRequest) {
 	try {
+		// 1. Authenticate user
+		const session = await auth0.getSession();
+		if (!session?.user) {
+			return NextResponse.json(
+				{ error: "Unauthorized: Please log in" },
+				{ status: 401 }
+			);
+		}
+
+		const userId = session.user.sub;
+
+		// 2. Check permission to use vision API
+		const authError = await withAuthorization(permissions.USE_VISION_API);
+		if (authError) return authError;
+
+		// 3. Get API token from Token Vault
+		const apiKey = await TokenVault.getToken(userId, 'openrouter');
+
+		if (!apiKey) {
+			return NextResponse.json(
+				{ 
+					error: "API key not configured",
+					message: "Please contact administrator to set up API access"
+				},
+				{ status: 500 }
+			);
+		}
+
+		// 4. Track token usage
+		await TokenVault.trackTokenUsage(userId, 'openrouter');
+
 		const formData = await req.formData();
 		const image = formData.get("image") as File;
 		const details = formData.get("details") as string;
@@ -56,13 +91,12 @@ ${details ? `\n**Additional context provided by user:** ${details}\n` : ""}
 Please provide your analysis in markdown format:`;
 
 
-		// Initialize OpenRouter with API key
+		// Initialize OpenRouter with API key from Token Vault
 		const openrouter = createOpenRouter({
-			apiKey: process.env.OPENROUTER_API_KEY,
+			apiKey: apiKey,
 		});
 
 		// Use Qwen2.5 VL 72B Instruct (free) - great for medical imaging
-		// Alternative: "google/gemini-2.0-flash-exp:free"
 		const { text } = await generateText({
 			model: openrouter("qwen/qwen2.5-vl-72b-instruct:free"),
 			messages: [
@@ -78,6 +112,8 @@ Please provide your analysis in markdown format:`;
 				},
 			],
 		});
+
+		console.log(`[Vision API] Analysis completed for user ${userId}`);
 
 		return NextResponse.json({ analysis: text });
 	} catch (error: unknown) {

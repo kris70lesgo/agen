@@ -21,6 +21,8 @@ import {
 const navItems = [
 	{ name: "Diet Plans", link: "/dashboard/dietplan" },
 	{ name: "AI Chat", link: "/dashboard/dietplan/aichat" },
+	{ name: "Settings", link: "/dashboard/settings" },
+	{ name: "Pricing", link: "/dashboard/pricing" },
 	{ name: "Home", link: "/" },
 ];
 

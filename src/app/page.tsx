@@ -7,6 +7,7 @@ import { HoverBorderGradient } from "@/components/ui/hover-border-gradient";
 import { MainNavbar } from "@/components/MainNavbar";
 import CardSwap, { Card } from '@/components/CardSwap';
 import { Marquee } from "@/components/ui/marquee";
+import { BentoDemo } from "@/components/Bentogrid";
 import { cn } from "@/lib/utils";
 
 export default async function Home() {
@@ -110,6 +111,16 @@ export default async function Home() {
               </CardSwap>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* BENTO GRID SECTION */}
+      <section className="relative z-10 py-20 px-6">
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-16 text-white">
+            Powerful Features
+          </h2>
+          <BentoDemo />
         </div>
       </section>
 
