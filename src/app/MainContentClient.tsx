@@ -32,8 +32,11 @@ function MainContent({ session }: { session: { user?: { email?: string; name?: s
       {/* Text and buttons */}
       <div className="relative z-20 flex max-w-3xl flex-col items-center text-center">
         <h1 className="block text-balance text-4xl font-bold leading-tight sm:text-5xl md:text-6xl text-white [text-shadow:_0_2px_4px_rgba(0,0,0,0.5)] [WebkitTextStroke:1px_black]">
-          Personalized nutrition guidance that adapts with every check-in
+          AI-Powered Health Analysis & Nutrition Planning
         </h1>
+        <p className="mt-4 text-gray-400 text-lg max-w-2xl leading-relaxed">
+          MedHack transforms your medical data into actionable insights — from detecting conditions to creating personalized diet plans in one secure platform.
+        </p>
         <div className="mt-9 flex flex-wrap items-center justify-center gap-4">
           <HoverBorderGradient
             containerClassName="rounded-full border border-white/20"

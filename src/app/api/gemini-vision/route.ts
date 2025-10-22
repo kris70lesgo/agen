@@ -6,6 +6,55 @@ import { withAuthorization } from "@/middleware/authorization";
 import { permissions } from "@/lib/auth0-fga";
 import { TokenVault } from "@/lib/token-vault";
 
+// Fallback models in order of preference
+const VISION_MODELS = [
+	"google/gemini-2.0-flash-exp:free",  // Primary: Best for medical imaging
+	"anthropic/claude-3.5-sonnet",        // Fallback 1: Excellent vision capabilities
+	"meta-llama/llama-2-7b-chat:free",    // Fallback 2: Open source alternative
+];
+
+interface AnalysisResult {
+	text: string;
+	model: string;
+	attempt: number;
+}
+
+async function analyzeWithModel(
+	openrouter: ReturnType<typeof createOpenRouter>,
+	model: string,
+	imageData: string,
+	mimeType: string,
+	prompt: string,
+	attempt: number
+): Promise<AnalysisResult> {
+	try {
+		console.log(`[Vision API] Attempt ${attempt}: Trying model ${model}`);
+		
+		const { text } = await generateText({
+			model: openrouter(model),
+			messages: [
+				{
+					role: "user",
+					content: [
+						{ type: "text", text: prompt },
+						{
+							type: "image",
+							image: `data:${mimeType};base64,${imageData}`,
+						},
+					],
+				},
+			],
+			temperature: 0.3,
+		});
+
+		console.log(`[Vision API] Success with model ${model} on attempt ${attempt}`);
+		return { text, model, attempt };
+	} catch (error) {
+		console.error(`[Vision API] Failed with model ${model}:`, error instanceof Error ? error.message : String(error));
+		throw error;
+	}
+}
+
 export async function POST(req: NextRequest) {
 	try {
 		// 1. Authenticate user
@@ -90,32 +139,58 @@ ${details ? `\n**Additional context provided by user:** ${details}\n` : ""}
 
 Please provide your analysis in markdown format:`;
 
-
 		// Initialize OpenRouter with API key from Token Vault
 		const openrouter = createOpenRouter({
 			apiKey: apiKey,
 		});
 
-		// Use Qwen2.5 VL 72B Instruct (free) - great for medical imaging
-		const { text } = await generateText({
-			model: openrouter("qwen/qwen2.5-vl-72b-instruct:free"),
-			messages: [
-				{
-					role: "user",
-					content: [
-						{ type: "text", text: prompt },
-						{
-							type: "image",
-							image: `data:${mimeType};base64,${base64Image}`,
-						},
-					],
+		// Try each model in fallback order
+		let lastError: Error | null = null;
+		let result: AnalysisResult | null = null;
+
+		for (let i = 0; i < VISION_MODELS.length; i++) {
+			const model = VISION_MODELS[i];
+			try {
+				result = await analyzeWithModel(
+					openrouter,
+					model,
+					base64Image,
+					mimeType,
+					prompt,
+					i + 1
+				);
+				break; // Success! Exit the loop
+			} catch (error) {
+				lastError = error instanceof Error ? error : new Error(String(error));
+				console.error(`[Vision API] Model ${model} failed, trying next...`);
+				
+				// Continue to next model if this one fails
+				if (i < VISION_MODELS.length - 1) {
+					continue;
+				}
+			}
+		}
+
+		// If all models failed, return error
+		if (!result) {
+			console.error(`[Vision API] All ${VISION_MODELS.length} models failed for user ${userId}`);
+			return NextResponse.json(
+				{ 
+					error: "Failed to analyze image with all available models",
+					details: lastError?.message || "Unknown error",
+					modelsAttempted: VISION_MODELS.length
 				},
-			],
+				{ status: 500 }
+			);
+		}
+
+		console.log(`[Vision API] Analysis completed for user ${userId} using model: ${result.model}`);
+
+		return NextResponse.json({ 
+			analysis: result.text,
+			model: result.model,
+			attempt: result.attempt
 		});
-
-		console.log(`[Vision API] Analysis completed for user ${userId}`);
-
-		return NextResponse.json({ analysis: text });
 	} catch (error: unknown) {
 		console.error("Error analyzing image:", error);
 		const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
