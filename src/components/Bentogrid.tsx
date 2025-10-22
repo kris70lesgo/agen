@@ -10,32 +10,32 @@ import { Marquee } from "@/components/ui/marquee"
 
 const files = [
   {
-    name: "bitcoin.pdf",
-    body: "Bitcoin is a cryptocurrency invented in 2008 by an unknown person or group of people using the name Satoshi Nakamoto.",
+    name: "health_data.json",
+    body: "Client health metrics including age, weight, allergies, and dietary restrictions for personalized meal planning.",
   },
   {
-    name: "finances.xlsx",
-    body: "A spreadsheet or worksheet is a file made of rows and columns that help sort data, arrange data easily, and calculate numerical data.",
+    name: "nutrition_plan.pdf",
+    body: "AI-generated personalized nutrition plan with weekly meal schedules and macro breakdowns.",
   },
   {
-    name: "logo.svg",
-    body: "Scalable Vector Graphics is an Extensible Markup Language-based vector image format for two-dimensional graphics with support for interactivity and animation.",
+    name: "medical_scan.jpg",
+    body: "Medical images analyzed by Med Scan AI for health insights and recommendations.",
   },
   {
-    name: "keys.gpg",
-    body: "GPG keys are used to encrypt and decrypt email, files, directories, and whole disk partitions and to authenticate messages.",
+    name: "diet_preferences.txt",
+    body: "Client dietary preferences, food restrictions, and favorite cuisines for better meal suggestions.",
   },
   {
-    name: "seed.txt",
-    body: "A seed phrase, seed recovery phrase or backup seed phrase is a list of words which store all the information needed to recover Bitcoin funds on-chain.",
+    name: "weekly_report.xlsx",
+    body: "Comprehensive weekly health report with progress tracking and AI-powered recommendations.",
   },
 ]
 
 const features = [
   {
     Icon: FileTextIcon,
-    name: "Save your files",
-    description: "We automatically save your files as you type.",
+    name: "Medical Image Analysis",
+    description: "Upload and analyze medical images with AI-powered Med Scan.",
     href: "#",
     cta: "Learn more",
     className: "col-span-3 lg:col-span-1",
@@ -68,8 +68,8 @@ const features = [
   },
   {
     Icon: BellIcon,
-    name: "Notifications",
-    description: "Get notified when something happens.",
+    name: "Real-time Notifications",
+    description: "Get notified when meal plans are ready or clients update their data.",
     href: "#",
     cta: "Learn more",
     className: "col-span-3 lg:col-span-2",
@@ -79,8 +79,8 @@ const features = [
   },
   {
     Icon: Share2Icon,
-    name: "Integrations",
-    description: "Supports 100+ integrations and counting.",
+    name: "AI Agent Integration",
+    description: "Integrate diet planning and health analysis with our AI agents.",
     href: "#",
     cta: "Learn more",
     className: "col-span-3 lg:col-span-2",
@@ -90,8 +90,8 @@ const features = [
   },
   {
     Icon: CalendarIcon,
-    name: "Calendar",
-    description: "Use the calendar to filter your files by date.",
+    name: "Weekly Meal Planning",
+    description: "Schedule and organize personalized meal plans with our calendar.",
     className: "col-span-3 lg:col-span-1",
     href: "#",
     cta: "Learn more",

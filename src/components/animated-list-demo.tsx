@@ -13,32 +13,31 @@ interface Item {
 
 let notifications = [
   {
-    name: "Payment received",
-    description: "Magic UI",
+    name: "Meal Plan Generated",
+    description: "Weekly diet plan ready for client review",
     time: "15m ago",
-
-    icon: "💸",
+    icon: "🍽️",
     color: "#00C9A7",
   },
   {
-    name: "User signed up",
-    description: "Magic UI",
+    name: "Med Scan Complete",
+    description: "Medical image analysis finished",
     time: "10m ago",
-    icon: "👤",
+    icon: "�",
     color: "#FFB800",
   },
   {
-    name: "New message",
-    description: "Magic UI",
+    name: "Client Updated Profile",
+    description: "New health metrics received",
     time: "5m ago",
-    icon: "💬",
+    icon: "�",
     color: "#FF3D71",
   },
   {
-    name: "New event",
-    description: "Magic UI",
+    name: "AI Recommendations Ready",
+    description: "Personalized nutrition insights generated",
     time: "2m ago",
-    icon: "🗞️",
+    icon: "🤖",
     color: "#1E86FF",
   },
 ]

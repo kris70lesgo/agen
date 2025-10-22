@@ -1,14 +1,12 @@
 import { auth0 } from "@/lib/auth0";
 import './globals.css';
 import React from "react";
-import Prism from "@/components/Prism";
-import { RainbowButton } from "@/components/ui/rainbow-button";
-import { HoverBorderGradient } from "@/components/ui/hover-border-gradient";
 import { MainNavbar } from "@/components/MainNavbar";
 import CardSwap, { Card } from '@/components/CardSwap';
 import { Marquee } from "@/components/ui/marquee";
 import { BentoDemo } from "@/components/Bentogrid";
 import { cn } from "@/lib/utils";
+import MainContent from "@/app/MainContentClient";
 
 export default async function Home() {
   const session = await auth0.getSession();
@@ -85,27 +83,54 @@ export default async function Home() {
                 pauseOnHover={false}
               >
                 <Card>
-                  <div className="p-8 bg-gradient-to-br from-purple-900/40 to-blue-900/40 backdrop-blur-sm rounded-2xl border border-white/10 h-full">
-                    <h3 className="text-2xl font-bold mb-4 text-white">Step 1: Client Intake</h3>
-                    <p className="text-gray-300 text-lg">
-                      Gather your client&apos;s health data, dietary preferences, and goals through our intuitive intake form.
-                    </p>
+                  <div className="p-8 bg-gradient-to-br from-purple-900/40 to-blue-900/40 backdrop-blur-sm rounded-2xl border border-white/10 h-full flex flex-col justify-between">
+                    <div>
+                      <h3 className="text-2xl font-bold mb-4 text-white">Step 1: Client Intake</h3>
+                      <p className="text-gray-300 text-lg">
+                        Gather your client&apos;s health data, dietary preferences, and goals through our intuitive intake form.
+                      </p>
+                    </div>
+                    <svg className="w-24 h-24 mx-auto mt-6 opacity-80" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <rect x="15" y="20" width="70" height="60" rx="4" stroke="#a78bfa" strokeWidth="2" fill="none"/>
+                      <line x1="25" y1="35" x2="75" y2="35" stroke="#a78bfa" strokeWidth="2"/>
+                      <circle cx="30" cy="50" r="3" fill="#a78bfa"/>
+                      <line x1="40" y1="48" x2="70" y2="48" stroke="#a78bfa" strokeWidth="1.5"/>
+                      <circle cx="30" cy="65" r="3" fill="#a78bfa"/>
+                      <line x1="40" y1="63" x2="70" y2="63" stroke="#a78bfa" strokeWidth="1.5"/>
+                    </svg>
                   </div>
                 </Card>
                 <Card>
-                  <div className="p-8 bg-gradient-to-br from-blue-900/40 to-cyan-900/40 backdrop-blur-sm rounded-2xl border border-white/10 h-full">
-                    <h3 className="text-2xl font-bold mb-4 text-white">Step 2: AI-Powered Analysis</h3>
-                    <p className="text-gray-300 text-lg">
-                      Our advanced AI analyzes the data and generates a personalized meal plan tailored to your client&apos;s unique needs.
-                    </p>
+                  <div className="p-8 bg-gradient-to-br from-blue-900/40 to-cyan-900/40 backdrop-blur-sm rounded-2xl border border-white/10 h-full flex flex-col justify-between">
+                    <div>
+                      <h3 className="text-2xl font-bold mb-4 text-white">Step 2: AI-Powered Analysis</h3>
+                      <p className="text-gray-300 text-lg">
+                        Our advanced AI analyzes the data and generates a personalized meal plan tailored to your client&apos;s unique needs.
+                      </p>
+                    </div>
+                    <svg className="w-24 h-24 mx-auto mt-6 opacity-80" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="50" cy="50" r="30" stroke="#06b6d4" strokeWidth="2" fill="none"/>
+                      <circle cx="50" cy="50" r="20" stroke="#06b6d4" strokeWidth="1.5" fill="none"/>
+                      <circle cx="50" cy="50" r="10" fill="#06b6d4" opacity="0.6"/>
+                      <line x1="50" y1="20" x2="50" y2="10" stroke="#06b6d4" strokeWidth="2"/>
+                      <line x1="80" y1="50" x2="90" y2="50" stroke="#06b6d4" strokeWidth="2"/>
+                      <line x1="70" y1="30" x2="77" y2="23" stroke="#06b6d4" strokeWidth="2"/>
+                    </svg>
                   </div>
                 </Card>
                 <Card>
-                  <div className="p-8 bg-gradient-to-br from-cyan-900/40 to-purple-900/40 backdrop-blur-sm rounded-2xl border border-white/10 h-full">
-                    <h3 className="text-2xl font-bold mb-4 text-white">Step 3: Review & Send</h3>
-                    <p className="text-gray-300 text-lg">
-                      Review, customize if needed, and send the plan directly to your client—all in seconds.
-                    </p>
+                  <div className="p-8 bg-gradient-to-br from-cyan-900/40 to-purple-900/40 backdrop-blur-sm rounded-2xl border border-white/10 h-full flex flex-col justify-between">
+                    <div>
+                      <h3 className="text-2xl font-bold mb-4 text-white">Step 3: Review & Send</h3>
+                      <p className="text-gray-300 text-lg">
+                        Review, customize if needed, and send the plan directly to your client—all in seconds.
+                      </p>
+                    </div>
+                    <svg className="w-24 h-24 mx-auto mt-6 opacity-80" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M20 50 L40 65 L80 30" stroke="#22d3ee" strokeWidth="3" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                      <circle cx="50" cy="50" r="35" stroke="#22d3ee" strokeWidth="2" fill="none" opacity="0.5"/>
+                      <circle cx="50" cy="50" r="3" fill="#22d3ee"/>
+                    </svg>
                   </div>
                 </Card>
               </CardSwap>
@@ -136,88 +161,6 @@ export default async function Home() {
     </div>
   );
 }
-
-// Separate client component for interactive features
-function MainContent({ session }: { session: { user?: { email?: string; name?: string } } | null }) {
-  return (
-    <main
-      className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 pt-32"
-      style={{ WebkitTapHighlightColor: "transparent" }}
-    >
-      {/* Prism background */}
-      <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
-        <div className="absolute inset-0 mix-blend-soft-light bg-[radial-gradient(circle_at_50%_0%,rgba(88,131,241,0.32)_0%,rgba(10,9,30,0.9)_52%,rgba(4,3,15,1)_88%)]" />
-        <Prism
-          animationType="rotate"
-          timeScale={0.35}
-          height={4.2}
-          baseWidth={5.2}
-          scale={3.2}
-          hueShift={0.35}
-          colorFrequency={1.6}
-          noise={0.08}
-          glow={1.4}
-          bloom={1.6}
-          transparent={true}
-          suspendWhenOffscreen={false}
-        />
-        <div className="pointer-events-none absolute inset-x-0 bottom-[-18%] h-[70%] mix-blend-screen bg-[radial-gradient(circle,_rgba(122,214,255,0.3)_0%,rgba(20,18,48,0.55)_46%,rgba(7,6,24,0.92)_82%)] blur-3xl" />
-      </div>
-
-      {/* Text and buttons */}
-      <div className="relative z-20 flex max-w-3xl flex-col items-center text-center">
-        <h1 className="block text-balance text-4xl font-bold leading-tight sm:text-5xl md:text-6xl text-white [text-shadow:_0_2px_4px_rgba(0,0,0,0.5)] [WebkitTextStroke:1px_black]">
-          Personalized nutrition guidance that adapts with every check-in
-        </h1>
-        <p className="mt-5 max-w-xl text-balance font-sans text-base font-semibold text-black">
-          Launch diet plans that stay in sync with your clients—AI-crafted, coach-approved, and ready to send in seconds.
-        </p>
-        <div className="mt-9 flex flex-wrap items-center justify-center gap-4">
-          <HoverBorderGradient
-            containerClassName="rounded-full border border-white/20"
-            as="button"
-            className="flex items-center gap-2 bg-white px-5 py-2 text-sm font-semibold text-black dark:bg-black dark:text-white"
-          >
-            <ButtonLogo />
-            <span>Live product tour</span>
-          </HoverBorderGradient>
-          {session ? (
-            <a href="/dashboard">
-              <RainbowButton variant="dark" className="px-6 py-2 text-sm font-semibold">
-                Go to Dashboard
-              </RainbowButton>
-            </a>
-          ) : (
-            <a href="/auth/login?screen_hint=signup&returnTo=/dashboard">
-              <RainbowButton variant="dark" className="px-6 py-2 text-sm font-semibold">
-                Get Started
-              </RainbowButton>
-            </a>
-          )}
-        </div>
-      </div>
-    </main>
-  );
-}
-
-const ButtonLogo = () => (
-  <svg
-    width="24"
-    height="24"
-    viewBox="0 0 66 65"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    className="h-4 w-4 text-black dark:text-white"
-  >
-    <path
-      d="M8 8.05571C8 8.05571 54.9009 18.1782 57.8687 30.062C60.8365 41.9458 9.05432 57.4696 9.05432 57.4696"
-      stroke="currentColor"
-      strokeWidth="12"
-      strokeMiterlimit="3.86874"
-      strokeLinecap="round"
-    />
-  </svg>
-);
 
 // Testimonials data
 const reviews = [
